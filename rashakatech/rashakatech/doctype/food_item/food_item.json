@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "autoname": "FOOD-.#####",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "food_name_ar",
+  "food_name_en",
+  "serving_size_g",
+  "column_break_kuan",
+  "unit",
+  "food_category",
+  "section_nutritional_values",
+  "calories_per_100g",
+  "protein_per_100g",
+  "carbs_per_100g",
+  "fat_per_100g",
+  "column_break_xgjw",
+  "fiber_per_100g",
+  "sugar_per_100g",
+  "sodium_per_100g",
+  "glycemic_index",
+  "section_dietary_flags",
+  "is_allowed_diabetic",
+  "is_allowed_gluten_free",
+  "is_allowed_keto",
+  "is_allowed_vegan",
+  "is_high_protein",
+  "barcode",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "food_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Food Name (Arabic)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "food_name_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Food Name (English)"
+  },
+  {
+   "fieldname": "food_category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Food Category",
+   "options": "Food Category"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Select",
+   "label": "Unit",
+   "options": "grams\npiece\ncup\ntablespoon\nml"
+  },
+  {
+   "default": "100",
+   "fieldname": "serving_size_g",
+   "fieldtype": "Float",
+   "label": "Serving Size (g)"
+  },
+  {
+   "fieldname": "section_nutritional_values",
+   "fieldtype": "Section Break",
+   "label": "Nutritional Values (per 100g)"
+  },
+  {
+   "fieldname": "calories_per_100g",
+   "fieldtype": "Float",
+   "label": "Calories",
+   "reqd": 1
+  },
+  {
+   "fieldname": "protein_per_100g",
+   "fieldtype": "Float",
+   "label": "Protein (g)"
+  },
+  {
+   "fieldname": "carbs_per_100g",
+   "fieldtype": "Float",
+   "label": "Carbs (g)"
+  },
+  {
+   "fieldname": "fat_per_100g",
+   "fieldtype": "Float",
+   "label": "Fat (g)"
+  },
+  {
+   "fieldname": "fiber_per_100g",
+   "fieldtype": "Float",
+   "label": "Fiber (g)"
+  },
+  {
+   "fieldname": "sugar_per_100g",
+   "fieldtype": "Float",
+   "label": "Sugar (g)"
+  },
+  {
+   "fieldname": "sodium_per_100g",
+   "fieldtype": "Float",
+   "label": "Sodium (mg)"
+  },
+  {
+   "fieldname": "glycemic_index",
+   "fieldtype": "Int",
+   "label": "Glycemic Index"
+  },
+  {
+   "fieldname": "section_dietary_flags",
+   "fieldtype": "Section Break",
+   "label": "Dietary Flags"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_allowed_diabetic",
+   "fieldtype": "Check",
+   "label": "Allowed for Diabetic"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_allowed_gluten_free",
+   "fieldtype": "Check",
+   "label": "Gluten Free"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_allowed_keto",
+   "fieldtype": "Check",
+   "label": "Keto Allowed"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_allowed_vegan",
+   "fieldtype": "Check",
+   "label": "Vegan"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_high_protein",
+   "fieldtype": "Check",
+   "label": "High Protein"
+  },
+  {
+   "fieldname": "barcode",
+   "fieldtype": "Data",
+   "label": "Barcode"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "column_break_kuan",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xgjw",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "links": [],
+ "modified": "2026-03-24 03:15:37.590538",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Food Item",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Nutritionist",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "food_name_ar,food_name_en",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "food_name_ar",
+ "track_changes": 1
+}

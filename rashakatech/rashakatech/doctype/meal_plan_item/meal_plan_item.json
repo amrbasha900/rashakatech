@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "meal_time",
+  "food_item",
+  "food_name",
+  "quantity_grams",
+  "calories",
+  "protein_g",
+  "carbs_g",
+  "fat_g",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "meal_time",
+   "fieldtype": "Select",
+   "label": "Meal Time",
+   "options": "Breakfast\nMid-Morning Snack\nLunch\nAfternoon Snack\nDinner\nBefore Bed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "food_item",
+   "fieldtype": "Link",
+   "label": "Food Item",
+   "options": "Food Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "food_name",
+   "fieldtype": "Data",
+   "label": "Food Name",
+   "fetch_from": "food_item.food_name_ar",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quantity_grams",
+   "fieldtype": "Float",
+   "label": "Quantity (g)",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "calories",
+   "fieldtype": "Float",
+   "label": "Calories",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "protein_g",
+   "fieldtype": "Float",
+   "label": "Protein (g)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "carbs_g",
+   "fieldtype": "Float",
+   "label": "Carbs (g)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fat_g",
+   "fieldtype": "Float",
+   "label": "Fat (g)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Meal Plan Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

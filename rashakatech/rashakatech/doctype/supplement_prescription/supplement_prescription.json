@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "supplement_name",
+  "supplement_type",
+  "dosage",
+  "frequency",
+  "timing",
+  "duration_weeks",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "supplement_name",
+   "fieldtype": "Data",
+   "label": "Supplement Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "supplement_type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Vitamin\nMineral\nProtein\nFat Burner\nProbiotic\nOmega\nOther",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "dosage",
+   "fieldtype": "Data",
+   "label": "Dosage",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "label": "Frequency",
+   "options": "Once Daily\nTwice Daily\nThree Times Daily\nWith Meals"
+  },
+  {
+   "fieldname": "timing",
+   "fieldtype": "Select",
+   "label": "Timing",
+   "options": "Morning\nEvening\nBefore Meal\nAfter Meal\nBedtime"
+  },
+  {
+   "fieldname": "duration_weeks",
+   "fieldtype": "Int",
+   "label": "Duration (Weeks)"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Supplement Prescription",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

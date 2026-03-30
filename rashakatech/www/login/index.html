@@ -1,0 +1,443 @@
+{% extends "templates/web.html" %}
+{% block title %}{{ _("تسجيل الدخول") }} | {{ _("مركز رشاقة") }}{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block navbar %}{% endblock %}
+
+{% block head_include %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Orbitron:wght@500;700&display=swap"
+  rel="stylesheet">
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --cyan: #00f0ff;
+    --cyan-dim: rgba(0, 240, 255, 0.15);
+    --cyan-glow: 0 0 20px rgba(0, 240, 255, 0.5);
+    --bg-dark: #050f18;
+    --card-bg: rgba(20, 30, 40, 0.65);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.6);
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: var(--bg-dark);
+    /* High-tech network background simulation */
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.08), transparent 25%),
+      linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--text-main);
+
+    direction: {
+        {
+        'rtl' if is_rtl else 'ltr'
+      }
+    }
+
+    ;
+  }
+
+  /* Hide Frappe default navbar/footer */
+  header,
+  footer,
+  .navbar,
+  .navbar-light,
+  .web-footer {
+    display: none !important;
+  }
+
+  .login-wrapper {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 1rem;
+    animation: fadeSlideIn 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logo-area {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .logo-icon img {
+    height: 65px;
+    filter: drop-shadow(0 0 10px var(--cyan));
+    margin-bottom: 10px;
+  }
+
+  .logo-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .logo-tagline {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    margin-top: 5px;
+  }
+
+  /* Main Glowing Card */
+  .login-card {
+    width: 100%;
+    background: var(--card-bg);
+    border: 2px solid var(--cyan);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow:
+      var(--cyan-glow),
+      inset 0 0 20px rgba(0, 240, 255, 0.1);
+    position: relative;
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .card-subtitle {
+    font-size: 1rem;
+    color: var(--text-main);
+    margin-bottom: 25px;
+  }
+
+  .field-group {
+    margin-bottom: 1rem;
+  }
+
+  /* Custom Input Styling matching the image */
+  .input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 12px;
+    padding: 0 15px;
+    transition: all 0.3s ease;
+  }
+
+  .input-wrap:focus-within {
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    background: rgba(0, 240, 255, 0.05);
+  }
+
+  .input-icon {
+    color: var(--cyan);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .input-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .input-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 15px;
+
+    text-align: {
+        {
+        'right' if is_rtl else 'left'
+      }
+    }
+
+    ;
+  }
+
+  .input-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+
+  input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .forgot-link {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0 5px;
+  }
+
+  .forgot-link a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .forgot-link a:hover {
+    color: var(--cyan);
+  }
+
+  /* Bright Cyan Login Button */
+  #login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--cyan);
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  }
+
+  #login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+  }
+
+  /* Social Login Section */
+  .social-login-area {
+    margin-top: 1.5rem;
+  }
+
+  .social-text {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 15px;
+  }
+
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .social-btn {
+    width: 45px;
+    height: 45px;
+    background: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .social-btn:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 240, 255, 0.1);
+  }
+
+  .signup-link {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .signup-link a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  .lang-toggle a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: var(--card-bg);
+    backdrop-filter: blur(5px);
+  }
+
+  @media(max-width: 480px) {
+    .login-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+    }
+
+    .logo-icon img {
+      height: 55px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="lang-toggle">
+  <a href="?lang={{ 'en' if is_rtl else 'ar' }}">
+    {{ "EN" if is_rtl else "العربية" }}
+  </a>
+</div>
+
+<div class="login-wrapper">
+  <div class="logo-area">
+    {% if company_logo %}
+    <div class="logo-icon">
+      <img src="{{ company_logo }}" alt="Logo">
+    </div>
+    {% else %}
+    <div class="logo-icon" style="font-size: 3rem; margin-bottom: 10px;">✚</div>
+    {% endif %}
+    <div class="logo-name">{{ company_name or "NURA HEALTH" }}</div>
+    <div class="logo-tagline">{{ _("Medical & Nutrition Portal") }}</div>
+  </div>
+
+  <div class="login-card">
+    <div class="card-title">{{ _("Log In to Your Portal") }}</div>
+    <div class="card-subtitle">{{ _("تسجيل الدخول إلى البوابة") }}</div>
+
+    <form id="login-form" onsubmit="return false;">
+
+      <!-- Username / Email Field -->
+      <div class="field-group">
+        <div class="input-wrap">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="input-content">
+            <div class="input-labels">
+              <span>Username or Email</span>
+              <span>اسم المستخدم أو البريد الإلكتروني</span>
+            </div>
+            <input type="text" id="email" placeholder="user@example.com" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="field-group">
+        <div class="input-wrap">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <div class="input-content">
+            <div class="input-labels">
+              <span>Password</span>
+              <span>كلمة المرور</span>
+            </div>
+            <input type="password" id="password" placeholder="••••••••" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forgot Password Links -->
+      <div class="forgot-link">
+        <a href="/forgot-password">Forgot Password?</a>
+        <a href="/forgot-password">نسيت كلمة المرور؟</a>
+      </div>
+
+      <!-- Login Button -->
+      <button type="submit" id="login-btn">
+        تسجيل الدخول LOG IN
+      </button>
+
+      <div id="login-msg" class="msg" style="display: none;"></div>
+
+      <!-- Social Login Area -->
+      <div class="social-login-area">
+        <div class="social-text">Or continue with | أو تابع باستخدام</div>
+        <div class="social-buttons">
+          <button type="button" class="social-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google"
+              width="20">
+          </button>
+          <button type="button" class="social-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" width="20"
+              style="filter: invert(1);">
+          </button>
+        </div>
+
+        <div class="signup-link">
+          Don't have an account? <a href="/signup">Sign Up Now</a> | ليس لديك حساب؟ <a href="/signup">أنشئ حساباً</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

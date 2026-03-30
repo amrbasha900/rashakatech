@@ -1,0 +1,254 @@
+{
+ "actions": [],
+ "autoname": "NP-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "protocol_name",
+  "patient",
+  "patient_name",
+  "practitioner",
+  "start_date",
+  "target_end_date",
+  "status",
+  "protocol_type",
+  "section_weight_goals",
+  "current_weight_kg",
+  "target_weight_kg",
+  "weekly_loss_target_kg",
+  "total_target_loss_kg",
+  "section_daily_targets",
+  "daily_calories_target",
+  "protein_grams",
+  "carbs_grams",
+  "fat_grams",
+  "water_liters",
+  "meal_frequency",
+  "section_dietary_restrictions",
+  "is_diabetic_diet",
+  "is_gluten_free",
+  "is_lactose_free",
+  "is_vegan",
+  "is_keto",
+  "medical_conditions",
+  "special_instructions",
+  "section_supplements",
+  "supplements",
+  "section_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "protocol_name",
+   "fieldtype": "Data",
+   "label": "Protocol Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "label": "Patient",
+   "options": "Patient",
+   "reqd": 1
+  },
+  {
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name",
+   "fetch_from": "patient.patient_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "practitioner",
+   "fieldtype": "Link",
+   "label": "Healthcare Practitioner",
+   "options": "Healthcare Practitioner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "target_end_date",
+   "fieldtype": "Date",
+   "label": "Target End Date"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nActive\nCompleted\nOn Hold"
+  },
+  {
+   "fieldname": "protocol_type",
+   "fieldtype": "Select",
+   "label": "Protocol Type",
+   "options": "Weight Loss\nMaintenance\nMuscle Gain\nMedical Nutrition"
+  },
+  {
+   "fieldname": "section_weight_goals",
+   "fieldtype": "Section Break",
+   "label": "Weight Goals"
+  },
+  {
+   "fieldname": "current_weight_kg",
+   "fieldtype": "Float",
+   "label": "Current Weight (kg)"
+  },
+  {
+   "fieldname": "target_weight_kg",
+   "fieldtype": "Float",
+   "label": "Target Weight (kg)",
+   "reqd": 1
+  },
+  {
+   "default": "0.5",
+   "fieldname": "weekly_loss_target_kg",
+   "fieldtype": "Float",
+   "label": "Weekly Loss Target (kg)"
+  },
+  {
+   "fieldname": "total_target_loss_kg",
+   "fieldtype": "Float",
+   "label": "Total Target Loss (kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_daily_targets",
+   "fieldtype": "Section Break",
+   "label": "Daily Targets"
+  },
+  {
+   "fieldname": "daily_calories_target",
+   "fieldtype": "Int",
+   "label": "Daily Calories Target"
+  },
+  {
+   "fieldname": "protein_grams",
+   "fieldtype": "Float",
+   "label": "Protein (g)"
+  },
+  {
+   "fieldname": "carbs_grams",
+   "fieldtype": "Float",
+   "label": "Carbs (g)"
+  },
+  {
+   "fieldname": "fat_grams",
+   "fieldtype": "Float",
+   "label": "Fat (g)"
+  },
+  {
+   "default": "2.5",
+   "fieldname": "water_liters",
+   "fieldtype": "Float",
+   "label": "Water (Liters)"
+  },
+  {
+   "default": "5",
+   "fieldname": "meal_frequency",
+   "fieldtype": "Int",
+   "label": "Meal Frequency"
+  },
+  {
+   "fieldname": "section_dietary_restrictions",
+   "fieldtype": "Section Break",
+   "label": "Dietary Restrictions"
+  },
+  {
+   "fieldname": "is_diabetic_diet",
+   "fieldtype": "Check",
+   "label": "Diabetic Diet"
+  },
+  {
+   "fieldname": "is_gluten_free",
+   "fieldtype": "Check",
+   "label": "Gluten Free"
+  },
+  {
+   "fieldname": "is_lactose_free",
+   "fieldtype": "Check",
+   "label": "Lactose Free"
+  },
+  {
+   "fieldname": "is_vegan",
+   "fieldtype": "Check",
+   "label": "Vegan"
+  },
+  {
+   "fieldname": "is_keto",
+   "fieldtype": "Check",
+   "label": "Keto"
+  },
+  {
+   "fieldname": "medical_conditions",
+   "fieldtype": "Text",
+   "label": "Medical Conditions"
+  },
+  {
+   "fieldname": "special_instructions",
+   "fieldtype": "Text Editor",
+   "label": "Special Instructions"
+  },
+  {
+   "fieldname": "section_supplements",
+   "fieldtype": "Section Break",
+   "label": "Supplements"
+  },
+  {
+   "fieldname": "supplements",
+   "fieldtype": "Table",
+   "label": "Supplements",
+   "options": "Supplement Prescription"
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Nutrition Protocol",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Nutritionist",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

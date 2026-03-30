@@ -1,0 +1,102 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"cy-7_EsEHt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Rashakatech</span>\",\"col\":12}},{\"id\":\"lfyWBDx49v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Body Composition Assessment\",\"col\":3}},{\"id\":\"xrSNfBF6S6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Meal Plan\",\"col\":3}},{\"id\":\"zlbviyTgNC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Food Item\",\"col\":3}},{\"id\":\"JZ9VFXVs6Q\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Food Category\",\"col\":3}},{\"id\":\"hojUOUZG7I\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Patient Food Log\",\"col\":3}},{\"id\":\"jbkDrVeHrW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program Session\",\"col\":3}},{\"id\":\"M83J114bXi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Body Measurement Log\",\"col\":3}},{\"id\":\"0oupBw13ay\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Nutrition Protocol\",\"col\":3}},{\"id\":\"rvKuW54WC4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Weight Loss Program\",\"col\":3}},{\"id\":\"SuzRQIqSsu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Patient Food Log\",\"col\":3}},{\"id\":\"aIYZHkqRp0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Weight Loss Program\",\"col\":3}}]",
+ "creation": "2026-03-24 03:53:32.359022",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "heart-active",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Rashakatech",
+ "links": [],
+ "modified": "2026-03-28 16:19:38.819156",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Rashakatech",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Food Item",
+   "link_to": "Food Item",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Meal Plan",
+   "link_to": "Meal Plan",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Food Category",
+   "link_to": "Food Category",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Program Session",
+   "link_to": "Program Session",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Nutrition Protocol",
+   "link_to": "Nutrition Protocol",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Body Composition Assessment",
+   "link_to": "Body Composition Assessment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Weight Loss Program",
+   "link_to": "Weight Loss Program",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Body Measurement Log",
+   "link_to": "Body Measurement Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Patient Food Log",
+   "link_to": "Patient Food Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Rashakatech"
+}

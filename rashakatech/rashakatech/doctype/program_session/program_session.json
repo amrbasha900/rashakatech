@@ -1,0 +1,186 @@
+{
+ "actions": [],
+ "autoname": "format:PS-{patient_name}-{#####}",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "patient",
+  "patient_name",
+  "program",
+  "appointment",
+  "column_break_evvu",
+  "session_date",
+  "session_type",
+  "session_number",
+  "assessment",
+  "section_weight_tracking",
+  "weight_this_session",
+  "weight_last_session",
+  "column_break_ldxr",
+  "weight_change",
+  "total_loss_to_date",
+  "section_compliance",
+  "compliance_score",
+  "counseling_notes",
+  "next_session_goals",
+  "protocol_adjustments",
+  "next_session_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Patient",
+   "options": "Patient",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "patient.patient_name",
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Weight Loss Program",
+   "options": "Weight Loss Program",
+   "reqd": 1
+  },
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Link",
+   "label": "Patient Appointment",
+   "options": "Patient Appointment"
+  },
+  {
+   "fieldname": "session_number",
+   "fieldtype": "Int",
+   "label": "Session Number"
+  },
+  {
+   "default": "Today",
+   "fieldname": "session_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Session Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "session_type",
+   "fieldtype": "Select",
+   "label": "Session Type",
+   "options": "Initial Assessment\nNutrition Counseling\nFollow-up\nFinal Review"
+  },
+  {
+   "fieldname": "assessment",
+   "fieldtype": "Link",
+   "label": "Body Composition Assessment",
+   "options": "Body Composition Assessment"
+  },
+  {
+   "fieldname": "section_weight_tracking",
+   "fieldtype": "Section Break",
+   "label": "Weight Tracking"
+  },
+  {
+   "fieldname": "weight_this_session",
+   "fieldtype": "Float",
+   "label": "Weight This Session (kg)"
+  },
+  {
+   "fieldname": "weight_last_session",
+   "fieldtype": "Float",
+   "label": "Weight Last Session (kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "weight_change",
+   "fieldtype": "Float",
+   "label": "Weight Change (kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_loss_to_date",
+   "fieldtype": "Float",
+   "label": "Total Loss To Date (kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_compliance",
+   "fieldtype": "Section Break",
+   "label": "Compliance & Notes"
+  },
+  {
+   "description": "0-100 scale",
+   "fieldname": "compliance_score",
+   "fieldtype": "Int",
+   "label": "Compliance Score (0-100)"
+  },
+  {
+   "fieldname": "counseling_notes",
+   "fieldtype": "Text Editor",
+   "label": "Counseling Notes"
+  },
+  {
+   "fieldname": "next_session_goals",
+   "fieldtype": "Text",
+   "label": "Next Session Goals"
+  },
+  {
+   "fieldname": "protocol_adjustments",
+   "fieldtype": "Text",
+   "label": "Protocol Adjustments"
+  },
+  {
+   "fieldname": "next_session_date",
+   "fieldtype": "Date",
+   "label": "Next Session Date"
+  },
+  {
+   "fieldname": "column_break_evvu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ldxr",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "links": [],
+ "modified": "2026-03-24 03:42:58.381294",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Program Session",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Nutritionist",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

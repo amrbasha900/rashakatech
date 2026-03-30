@@ -1,0 +1,306 @@
+{
+ "actions": [],
+ "autoname": "BCA-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "assessment_id",
+  "patient",
+  "patient_name",
+  "column_break_pamv",
+  "assessment_date",
+  "visit_type",
+  "practitioner",
+  "section_body_measurements",
+  "weight_kg",
+  "height_cm",
+  "column_break_thdw",
+  "bmi",
+  "bmi_category",
+  "section_body_composition",
+  "body_fat_percentage",
+  "muscle_mass_kg",
+  "column_break_sjcq",
+  "visceral_fat_level",
+  "section_circumference",
+  "waist_cm",
+  "hip_cm",
+  "waist_hip_ratio",
+  "neck_cm",
+  "column_break_zcdw",
+  "chest_cm",
+  "arm_cm",
+  "thigh_cm",
+  "section_metabolic",
+  "patient_age",
+  "gender",
+  "activity_factor",
+  "column_break_pnvw",
+  "bmr_calculated",
+  "tdee_calculated",
+  "section_vitals",
+  "blood_pressure_systolic",
+  "blood_pressure_diastolic",
+  "column_break_zyvk",
+  "blood_sugar_fasting",
+  "section_notes",
+  "nutrition_protocol",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "assessment_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Assessment ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "label": "Patient",
+   "options": "Patient",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "patient.patient_name",
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "practitioner",
+   "fieldtype": "Link",
+   "label": "Healthcare Practitioner",
+   "options": "Healthcare Practitioner",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "assessment_date",
+   "fieldtype": "Date",
+   "label": "Assessment Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "visit_type",
+   "fieldtype": "Select",
+   "label": "Visit Type",
+   "options": "Initial\nFollow-up\nFinal",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_body_measurements",
+   "fieldtype": "Section Break",
+   "label": "Body Measurements"
+  },
+  {
+   "fieldname": "weight_kg",
+   "fieldtype": "Float",
+   "label": "Weight (kg)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "height_cm",
+   "fieldtype": "Float",
+   "label": "Height (cm)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bmi",
+   "fieldtype": "Float",
+   "label": "BMI",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bmi_category",
+   "fieldtype": "Data",
+   "label": "BMI Category",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_body_composition",
+   "fieldtype": "Section Break",
+   "label": "Body Composition"
+  },
+  {
+   "fieldname": "body_fat_percentage",
+   "fieldtype": "Float",
+   "label": "Body Fat Percentage (%)"
+  },
+  {
+   "fieldname": "muscle_mass_kg",
+   "fieldtype": "Float",
+   "label": "Muscle Mass (kg)"
+  },
+  {
+   "fieldname": "visceral_fat_level",
+   "fieldtype": "Int",
+   "label": "Visceral Fat Level"
+  },
+  {
+   "fieldname": "section_circumference",
+   "fieldtype": "Section Break",
+   "label": "Circumference Measurements (cm)"
+  },
+  {
+   "fieldname": "waist_cm",
+   "fieldtype": "Float",
+   "label": "Waist (cm)"
+  },
+  {
+   "fieldname": "hip_cm",
+   "fieldtype": "Float",
+   "label": "Hip (cm)"
+  },
+  {
+   "fieldname": "waist_hip_ratio",
+   "fieldtype": "Float",
+   "label": "Waist-to-Hip Ratio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "neck_cm",
+   "fieldtype": "Float",
+   "label": "Neck (cm)"
+  },
+  {
+   "fieldname": "chest_cm",
+   "fieldtype": "Float",
+   "label": "Chest (cm)"
+  },
+  {
+   "fieldname": "arm_cm",
+   "fieldtype": "Float",
+   "label": "Arm (cm)"
+  },
+  {
+   "fieldname": "thigh_cm",
+   "fieldtype": "Float",
+   "label": "Thigh (cm)"
+  },
+  {
+   "fieldname": "section_metabolic",
+   "fieldtype": "Section Break",
+   "label": "Metabolic Calculations"
+  },
+  {
+   "fieldname": "patient_age",
+   "fieldtype": "Int",
+   "label": "Patient Age"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "Male\nFemale"
+  },
+  {
+   "fieldname": "activity_factor",
+   "fieldtype": "Select",
+   "label": "Activity Factor",
+   "options": "Sedentary\nLightly Active\nModerately Active\nVery Active"
+  },
+  {
+   "fieldname": "bmr_calculated",
+   "fieldtype": "Float",
+   "label": "BMR Calculated",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tdee_calculated",
+   "fieldtype": "Float",
+   "label": "TDEE Calculated",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_vitals",
+   "fieldtype": "Section Break",
+   "label": "Vitals"
+  },
+  {
+   "fieldname": "blood_pressure_systolic",
+   "fieldtype": "Int",
+   "label": "Systolic Blood Pressure"
+  },
+  {
+   "fieldname": "blood_pressure_diastolic",
+   "fieldtype": "Int",
+   "label": "Diastolic Blood Pressure"
+  },
+  {
+   "fieldname": "blood_sugar_fasting",
+   "fieldtype": "Float",
+   "label": "Fasting Blood Sugar"
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "nutrition_protocol",
+   "fieldtype": "Link",
+   "label": "Nutrition Protocol",
+   "options": "Nutrition Protocol"
+  },
+  {
+   "fieldname": "column_break_pamv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_thdw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_sjcq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_zcdw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_pnvw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_zyvk",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "links": [],
+ "modified": "2026-03-24 02:56:33.472612",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Body Composition Assessment",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

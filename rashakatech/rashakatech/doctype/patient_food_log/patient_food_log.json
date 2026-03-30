@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "autoname": "PFL-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "patient",
+  "patient_name",
+  "log_date",
+  "meal_time",
+  "patient_food_log_items",
+  "section_wellness",
+  "hunger_level",
+  "mood",
+  "water_intake_ml",
+  "exercise_done",
+  "exercise_description",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Patient",
+   "options": "Patient",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "patient.patient_name",
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "log_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Log Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "meal_time",
+   "fieldtype": "Select",
+   "label": "Meal Time",
+   "options": "Breakfast\nMid-Morning\nLunch\nAfternoon Snack\nDinner"
+  },
+  {
+   "fieldname": "section_wellness",
+   "fieldtype": "Section Break",
+   "label": "Wellness Tracking"
+  },
+  {
+   "fieldname": "hunger_level",
+   "fieldtype": "Select",
+   "label": "Hunger Level",
+   "options": "1 - Very Hungry\n3 - Normal\n5 - Very Full"
+  },
+  {
+   "fieldname": "mood",
+   "fieldtype": "Select",
+   "label": "Mood",
+   "options": "Happy\nStressed\nTired\nAnxious\nNormal"
+  },
+  {
+   "fieldname": "water_intake_ml",
+   "fieldtype": "Float",
+   "label": "Water Intake (ml)"
+  },
+  {
+   "default": "0",
+   "fieldname": "exercise_done",
+   "fieldtype": "Check",
+   "label": "Exercise Done"
+  },
+  {
+   "depends_on": "eval:doc.exercise_done",
+   "fieldname": "exercise_description",
+   "fieldtype": "Data",
+   "label": "Exercise Description"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "patient_food_log_items",
+   "fieldtype": "Table",
+   "label": "Patient Food Log Items",
+   "options": "Patient Food Log Items"
+  }
+ ],
+ "links": [],
+ "modified": "2026-03-26 02:47:27.655193",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Patient Food Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Nutritionist",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

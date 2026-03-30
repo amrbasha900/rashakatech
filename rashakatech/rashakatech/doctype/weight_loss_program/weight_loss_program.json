@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "autoname": "WLP-.#####",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "program_name",
+  "program_type",
+  "duration_weeks",
+  "sessions_count",
+  "price",
+  "practitioner",
+  "description",
+  "includes_supplements",
+  "includes_lab_tests",
+  "includes_meal_plan",
+  "is_active",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "program_name",
+   "fieldtype": "Data",
+   "label": "Program Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "program_type",
+   "fieldtype": "Select",
+   "label": "Program Type",
+   "options": "Individual\nGroup\nOnline\nHybrid",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "duration_weeks",
+   "fieldtype": "Int",
+   "label": "Duration (Weeks)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sessions_count",
+   "fieldtype": "Int",
+   "label": "Sessions Count",
+   "reqd": 1
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "practitioner",
+   "fieldtype": "Link",
+   "label": "Healthcare Practitioner",
+   "options": "Healthcare Practitioner"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "includes_supplements",
+   "fieldtype": "Check",
+   "label": "Includes Supplements"
+  },
+  {
+   "fieldname": "includes_lab_tests",
+   "fieldtype": "Check",
+   "label": "Includes Lab Tests"
+  },
+  {
+   "fieldname": "includes_meal_plan",
+   "fieldtype": "Check",
+   "label": "Includes Meal Plan"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Rashakatech",
+ "name": "Weight Loss Program",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Nutritionist",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

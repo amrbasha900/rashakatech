@@ -1,0 +1,545 @@
+{% extends "templates/web.html" %}
+{% block title %}{{ _("لوحة التحكم") }} | {{ _("رشاقة تك") }}{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block head_include %}
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { 
+    --cyan: #00f0ff; 
+    --cyan-dim: rgba(0, 240, 255, 0.15); 
+    --cyan-glow: 0 0 20px rgba(0, 240, 255, 0.5); 
+    --gold: #f5c842; 
+    --green: #00ff88; 
+    --red: #ff4d6d; 
+    --bg-dark: #050f18; 
+    --card-bg: rgba(20, 30, 40, 0.65); 
+    --border: rgba(0, 240, 255, 0.2); 
+    --text-main: #ffffff; 
+    --text-dim: rgba(255, 255, 255, 0.6); 
+    --text-bright: #ffffff; 
+    --bg: var(--bg-dark);
+    --card: var(--card-bg);
+    --text: var(--text-main);
+  }
+  html, body { 
+    font-family:'Tajawal',sans-serif; 
+    background-color:var(--bg-dark); 
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.08), transparent 25%),
+      linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    background-attachment: fixed;
+    color:var(--text); 
+    min-height:100vh; 
+    direction: {{ 'rtl' if is_rtl else 'ltr' }}; 
+    overflow-x:hidden;
+  }
+  header.navbar, .web-footer, footer, .navbar, .navbar-light { display:none !important; }
+  /* No more orbs needed due to the background gradients */
+
+  /* ── NAV ── */
+  .portal-nav {
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.8rem 1.5rem;
+    background:rgba(5, 15, 24, 0.95);
+    border-bottom:2px solid var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+    backdrop-filter:blur(20px);
+  }
+  .nav-brand { display:flex; align-items:center; gap:0.6rem; flex-shrink:0; }
+  .nav-logo { width:32px; height:32px; background:linear-gradient(135deg,var(--cyan),#0066cc); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; box-shadow:var(--cyan-glow); }
+  .nav-name { font-family:'Orbitron',monospace; font-size:0.9rem; font-weight:700; color:var(--cyan); letter-spacing:1px; }
+  
+  .nav-links { display:flex; gap:0.2rem; }
+  .nav-link {
+    padding:0.4rem 0.8rem; border-radius:8px; text-decoration:none;
+    color:var(--text-dim); font-size:0.85rem; font-weight:500;
+    transition:all 0.2s; border:1px solid transparent; white-space:nowrap;
+  }
+  .nav-link:hover, .nav-link.active {
+    color:var(--text-bright); background:var(--cyan-dim); border-color:var(--border);
+  }
+  
+  .nav-right { display:flex; align-items:center; gap:0.8rem; }
+  .lang-btn {
+    padding:0.4rem 0.8rem; border-radius:8px; text-decoration:none;
+    border:1px solid var(--border); background:var(--cyan-dim); 
+    color:var(--cyan); font-size:0.8rem; font-weight:700;
+  }
+  .nav-user { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:var(--text-dim); }
+  .nav-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),#0055aa); display:flex; align-items:center; justify-content:center; font-size:0.8rem; border:1px solid var(--border); flex-shrink:0; }
+  .nav-user-name { display: none; }
+  @media(min-width: 900px) { .nav-user-name { display: inline; } }
+
+  .menu-toggle { display:none; background:none; border:none; color:var(--cyan); font-size:1.5rem; cursor:pointer; }
+  
+  /* ── SIDEBAR ── */
+  .mobile-sidebar { position:fixed; inset:0; z-index:1000; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  .mobile-sidebar.open { opacity:1; pointer-events:all; }
+  .sidebar-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); }
+  .sidebar-content { 
+    position:absolute; top:0; bottom:0; width:280px; background:var(--bg); 
+    {{ 'right' if is_rtl else 'left' }}:0; 
+    transform:translateX({{ '100%' if is_rtl else '-100%' }}); 
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    display:flex; flex-direction:column; padding:2rem 1.5rem;
+    border-{{ 'left' if is_rtl else 'right' }}:1px solid var(--border);
+  }
+  .mobile-sidebar.open .sidebar-content { transform:translateX(0); }
+  .sidebar-header { margin-bottom:2rem; display:flex; align-items:center; gap:1rem; }
+  .sidebar-links { display:flex; flex-direction:column; gap:0.5rem; flex:1; }
+  .sidebar-link { 
+    display:flex; align-items:center; gap:0.8rem; padding:0.8rem 1rem; border-radius:12px;
+    text-decoration:none; color:var(--text-dim); transition:all 0.2s;
+  }
+  .sidebar-link:hover, .sidebar-link.active { background:var(--cyan-dim); color:var(--text-bright); }
+  .sidebar-footer { margin-top:auto; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.05); }
+  .logout-btn { 
+    display:flex; align-items:center; gap:0.8rem; width:100%; padding:0.8rem 1rem; 
+    border-radius:12px; background:rgba(255,80,80,0.1); color:var(--red); border:1px solid rgba(255,80,80,0.2);
+    font-family:'Tajawal',sans-serif; font-size:0.9rem; cursor:pointer; transition:all 0.2s;
+  }
+  .logout-btn:hover { background:rgba(255,80,80,0.2); }
+
+  /* ── LAYOUT ── */
+  .page-wrap { position:relative; z-index:1; padding:1.5rem 2rem 3rem; max-width:1400px; margin:0 auto; }
+  .page-header { margin-bottom:1.5rem; animation:fadeIn 0.6s ease; }
+  .page-header h1 { font-size:1.6rem; font-weight:700; color:var(--text-bright); }
+  .page-header p { color:var(--text-dim); font-size:0.9rem; margin-top:0.2rem; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── GLASS CARD ── */
+  .card { 
+    background:var(--card-bg); 
+    border:2px solid var(--cyan); 
+    border-radius:20px; 
+    backdrop-filter:blur(15px); 
+    -webkit-backdrop-filter:blur(15px);
+    position:relative; 
+    overflow:hidden; 
+    animation:fadeIn 0.7s ease both; 
+    box-shadow: var(--cyan-glow), inset 0 0 20px rgba(0, 240, 255, 0.1);
+  }
+  .card-header { padding:1.2rem 1.4rem 0.8rem; border-bottom:1px solid rgba(0,240,255,0.2); display:flex; align-items:center; justify-content:space-between; }
+  .card-title { font-size:0.9rem; font-weight:600; color:var(--cyan); letter-spacing:0.5px; display:flex; align-items:center; gap:0.5rem; }
+  .card-body { padding:1.2rem 1.4rem; }
+  .corner { position:absolute; width:14px; height:14px; border-color:var(--cyan); border-style:solid; opacity:0.4; }
+  .corner.tl { top:8px; right:8px; border-width:1.5px 0 0 1.5px; }
+  .corner.br { bottom:8px; left:8px; border-width:0 1.5px 1.5px 0; }
+
+  /* ── KPI ROW ── */
+  .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.2rem; }
+  .kpi-card {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:1.1rem 1.3rem; position:relative; overflow:hidden;
+    animation:fadeIn 0.6s ease both;
+    transition:transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .kpi-card:hover { transform:translateY(-3px); border-color:var(--cyan); box-shadow:var(--cyan-glow); }
+  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+  .kpi-card.c1::before { background:linear-gradient(90deg,var(--cyan),transparent); }
+  .kpi-card.c2::before { background:linear-gradient(90deg,var(--gold),transparent); }
+  .kpi-card.c3::before { background:linear-gradient(90deg,var(--green),transparent); }
+  .kpi-card.c4::before { background:linear-gradient(90deg,var(--red),transparent); }
+  .kpi-label { font-size:0.78rem; color:var(--text-dim); margin-bottom:0.4rem; letter-spacing:0.3px; }
+  .kpi-value { font-family:'Orbitron',monospace; font-size:2rem; font-weight:700; line-height:1; }
+  .kpi-card.c1 .kpi-value { color:var(--cyan); }
+  .kpi-card.c2 .kpi-value { color:var(--gold); }
+  .kpi-card.c3 .kpi-value { color:var(--green); }
+  .kpi-card.c4 .kpi-value { color:var(--red); }
+  .kpi-unit { font-size:0.75rem; color:var(--text-dim); margin-top:0.25rem; }
+  .kpi-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:2rem; opacity:0.15; }
+  .scan-line { position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:scan 3s linear infinite; opacity:0.3; }
+  @keyframes scan { 0%{top:-2px} 100%{top:100%} }
+
+  /* ── MAIN GRID ── */
+  .main-grid { display:grid; grid-template-columns:1fr 1fr 340px; gap:1rem; margin-bottom:1rem; }
+  .charts-col { display:flex; flex-direction:column; gap:1rem; }
+  .side-col { display:flex; flex-direction:column; gap:1rem; }
+
+  /* ── CHART CANVAS ── */
+  .chart-wrap { height:200px; position:relative; }
+
+  /* ── GOAL PROGRESS ── */
+  .goal-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.2rem 1.4rem; position:relative; overflow:hidden; }
+  .goal-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--green),transparent); }
+  .goal-bar-bg { background:rgba(255,255,255,0.06); border-radius:999px; height:8px; overflow:hidden; margin:0.7rem 0 0.4rem; }
+  .goal-bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--green),var(--cyan)); width:0; transition:width 1.2s cubic-bezier(0.16,1,0.3,1); box-shadow:0 0 12px rgba(0,255,136,0.4); }
+  .goal-labels { display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-dim); }
+
+  /* ── RING CHART ── */
+  .ring-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+  .ring-wrap { position:relative; height:110px; }
+  .ring-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; }
+  .ring-pct { font-family:'Orbitron',monospace; font-size:1.1rem; font-weight:700; }
+  .ring-label { font-size:0.7rem; color:var(--text-dim); margin-top:2px; }
+
+  /* ── BODY STATS CARD ── */
+  .body-stat-row { display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0; border-bottom:1px solid rgba(0,212,255,0.07); }
+  .body-stat-row:last-child { border-bottom:none; }
+  .bsr-label { font-size:0.82rem; color:var(--text-dim); }
+  .bsr-val { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--cyan); }
+  .bsr-badge { font-size:0.7rem; padding:2px 8px; border-radius:999px; font-weight:600; }
+  .badge-normal { background:rgba(0,255,136,0.15); color:var(--green); border:1px solid rgba(0,255,136,0.3); }
+  .badge-warn { background:rgba(245,200,66,0.15); color:var(--gold); border:1px solid rgba(245,200,66,0.3); }
+  .badge-danger { background:rgba(255,77,109,0.15); color:var(--red); border:1px solid rgba(255,77,109,0.3); }
+
+  /* ── NEXT SESSION ── */
+  .session-box { background:rgba(0,212,255,0.05); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1rem; display:flex; gap:1rem; align-items:center; }
+  .session-date-box { background:linear-gradient(135deg,var(--cyan),#0066cc); border-radius:10px; padding:0.5rem 0.8rem; text-align:center; min-width:60px; }
+  .session-day { font-family:'Orbitron',monospace; font-size:1.5rem; font-weight:900; color:#fff; line-height:1; }
+  .session-month { font-size:0.65rem; color:rgba(255,255,255,0.8); letter-spacing:1px; }
+  .session-info { flex:1; }
+  .session-type { font-size:0.9rem; font-weight:600; color:var(--text-bright); }
+  .session-num { font-size:0.78rem; color:var(--text-dim); margin-top:0.2rem; }
+
+  /* ── BOTTOM GRID ── */
+  .bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+  /* ── QUICK ACTIONS ── */
+  .actions-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; }
+  .action-btn {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:0.4rem; padding:0.9rem; border-radius:12px; text-decoration:none;
+    border:1px solid var(--border); background:rgba(0,212,255,0.04);
+    color:var(--text); font-size:0.82rem; font-weight:500;
+    transition:all 0.25s; cursor:pointer;
+  }
+  .action-btn:hover { background:var(--cyan-dim); border-color:var(--cyan); color:var(--cyan); transform:translateY(-2px); box-shadow:var(--cyan-glow); }
+  .action-icon { font-size:1.6rem; }
+
+  /* ── HIDDEN DATA ── */
+  .hidden-data { display:none; }
+
+  @media(max-width:1100px) { 
+    .main-grid { grid-template-columns: 1fr 1fr; } 
+    .side-col { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; } 
+  }
+  @media(max-width:850px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .side-col { grid-template-columns: 1fr; }
+    .main-grid { grid-template-columns: 1fr; }
+    .side-col { grid-column: span 1; }
+  }
+  @media(max-width:768px) {
+    .menu-toggle { display:block; }
+    .nav-links, .nav-right { display:none; }
+    .portal-nav { padding: 0.8rem 1.2rem; }
+    .page-wrap { padding: 1rem 1rem 3rem; }
+    .kpi-value { font-size: 1.6rem; }
+    .ring-row { grid-template-columns: 1fr; gap: 1.5rem; }
+    .actions-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="bg-grid"></div>
+
+<!-- NAV -->
+<nav class="portal-nav">
+  <div class="nav-brand">
+    {% if company_logo %}
+      <img src="{{ company_logo }}" alt="Logo" style="height:32px; filter:drop-shadow(0 0 8px rgba(0,212,255,0.3));">
+    {% else %}
+      <div class="nav-logo">🏥</div>
+    {% endif %}
+    <div class="nav-name">{{ company_name | upper }}</div>
+  </div>
+  
+  <div class="nav-links">
+    <a href="/dashboard" class="nav-link active">🏠 {{ _("الرئيسية") }}</a>
+    <a href="/meal-plan" class="nav-link">🥗 {{ _("خطة الغذاء") }}</a>
+    <a href="/food-log" class="nav-link">📝 {{ _("سجل الأكل") }}</a>
+    <a href="/measurements" class="nav-link">⚖️ {{ _("القياسات") }}</a>
+    <a href="/sessions" class="nav-link">📋 {{ _("الجلسات") }}</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="?lang={{ 'en' if is_rtl else 'ar' }}" class="lang-btn">
+      {{ "English" if is_rtl else "العربية" }}
+    </a>
+    <div class="nav-user">
+      <div class="nav-avatar">{{ (patient.patient_name or 'م')[0] }}</div>
+      <span class="nav-user-name">{{ patient.patient_name or _('المريض') }}</span>
+      <a href="/?cmd=logout&redirect_to=/login" class="lang-btn" style="margin-right:0.5rem; background:rgba(255,80,80,0.1); color:var(--red); border-color:rgba(255,80,80,0.2);">
+        {{ _("خروج") }}
+      </a>
+    </div>
+  </div>
+
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+</nav>
+
+<!-- MOBILE SIDEBAR -->
+<div class="mobile-sidebar" id="mobile-sidebar">
+  <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <div class="nav-avatar" style="width:45px; height:45px; font-size:1.2rem;">{{ (patient.patient_name or 'م')[0] }}</div>
+      <div>
+        <div style="font-weight:700; color:var(--text-bright); font-size:1rem;">{{ patient.patient_name or _('المريض') }}</div>
+        <div style="font-size:0.75rem; color:var(--text-dim);">#{{ patient.name }}</div>
+      </div>
+    </div>
+
+    <div class="sidebar-links">
+      <a href="/dashboard" class="sidebar-link active">🏠 {{ _("الرئيسية") }}</a>
+      <a href="/meal-plan" class="sidebar-link">🥗 {{ _("خطة الغذاء") }}</a>
+      <a href="/food-log" class="sidebar-link">📝 {{ _("سجل الأكل") }}</a>
+      <a href="/measurements" class="sidebar-link">⚖️ {{ _("القياسات") }}</a>
+      <a href="/sessions" class="sidebar-link">📋 {{ _("الجلسات") }}</a>
+      <a href="?lang={{ 'en' if is_rtl else 'ar' }}" class="sidebar-link" style="margin-top:0.5rem; border:1px solid var(--border); background:var(--cyan-dim);">
+        🌐 {{ "English" if is_rtl else "العربية" }}
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="location.href='/?cmd=logout&redirect_to=/login'">
+        🚪 {{ _("تسجيل الخروج") }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('mobile-sidebar').classList.toggle('open');
+}
+</script>
+
+<!-- Hidden data for JS -->
+<script id="weight-data" type="application/json" class="hidden-data">
+{{ weight_history | tojson }}
+</script>
+<span id="today-cal-val" class="hidden-data">{{ today_calories }}</span>
+<span id="target-cal-val" class="hidden-data">{{ protocol.daily_calories_target or 2000 }}</span>
+<span id="water-ml-val" class="hidden-data">{{ today_water_ml }}</span>
+<span id="target-water-val" class="hidden-data">{{ (protocol.water_liters or 2.5) * 1000 }}</span>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <h1>{{ _("أهلاً،") }} {{ patient.patient_name or _('مريضنا الكريم') }} 👋</h1>
+    <p>{{ frappe.utils.formatdate(frappe.utils.today(), 'EEEE، d MMMM yyyy') }}</p>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid">
+    <div class="kpi-card c1">
+      <div class="scan-line"></div>
+      <div class="corner tl"></div>
+      <div class="kpi-icon">⚖️</div>
+      <div class="kpi-label">{{ _("الوزن الحالي") }}</div>
+      <div class="kpi-value" data-val="{{ latest_assessment.weight_kg or 0 }}">{{ latest_assessment.weight_kg or 0 }}</div>
+      <div class="kpi-unit">{{ _("كيلوجرام") }}</div>
+    </div>
+    <div class="kpi-card c2">
+      <div class="scan-line"></div>
+      <div class="corner tl"></div>
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">{{ _("مؤشر كتلة الجسم") }}</div>
+      <div class="kpi-value" data-val="{{ latest_assessment.bmi or 0 }}">{{ latest_assessment.bmi or 0 }}</div>
+      <div class="kpi-unit">{{ latest_assessment.bmi_category or _('غير محدد') }}</div>
+    </div>
+    <div class="kpi-card c3">
+      <div class="scan-line"></div>
+      <div class="corner tl"></div>
+      <div class="kpi-icon">🏆</div>
+      <div class="kpi-label">{{ _("إجمالي ما خسرته") }}</div>
+      <div class="kpi-value" data-val="{{ total_lost }}">{{ total_lost }}</div>
+      <div class="kpi-unit">{{ _("كيلوجرام") }}</div>
+    </div>
+    <div class="kpi-card c4">
+      <div class="scan-line"></div>
+      <div class="corner tl"></div>
+      <div class="kpi-icon">💪</div>
+      <div class="kpi-label">{{ _("الدهون في الجسم") }}</div>
+      <div class="kpi-value" data-val="{{ latest_assessment.body_fat_percentage or 0 }}">{{ latest_assessment.body_fat_percentage or 0 }}</div>
+      <div class="kpi-unit">{{ _("نسبة مئوية %") }}</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+    <!-- Weight Chart -->
+    <div class="charts-col">
+      <div class="card" style="animation-delay:0.1s">
+        <div class="card-header">
+          <div class="card-title">📈 {{ _("منحنى الوزن عبر الزمن") }}</div>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Fat / Muscle Chart -->
+      <div class="card" style="animation-delay:0.2s">
+        <div class="card-header">
+          <div class="card-title">🔬 {{ _("الدهون مقابل العضلات") }}</div>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="fatMuscleChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center column -->
+    <div class="charts-col">
+      <!-- Goal Progress -->
+      <div class="goal-card" style="animation-delay:0.15s">
+        <div class="corner tl"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:0.85rem;color:var(--text-dim);font-weight:600;">🎯 {{ _("تقدمك نحو الهدف") }}</div>
+          <span class="goal-pct" style="font-family:'Orbitron',monospace;color:var(--green);font-size:1rem;font-weight:700;">0%</span>
+        </div>
+        <div class="goal-bar-bg">
+          <div class="goal-bar-fill progress-lost" data-val="{{ total_lost }}"></div>
+        </div>
+        <div class="goal-labels">
+          <span>{{ _("خسرت:") }} <b style="color:var(--green)">{{ total_lost }} {{ _("كجم") }}</b></span>
+          <span class="progress-total" data-val="{{ protocol.total_target_loss_kg or 1 }}">{{ _("الهدف:") }} <b style="color:var(--cyan)">{{ protocol.total_target_loss_kg or '—' }} {{ _("كجم") }}</b></span>
+        </div>
+      </div>
+
+      <!-- Daily Rings -->
+      <div class="card" style="animation-delay:0.25s">
+        <div class="card-header">
+          <div class="card-title">⚡ {{ _("إحصائيات اليوم") }}</div>
+        </div>
+        <div class="card-body">
+          <div class="ring-row">
+            <div>
+              <div style="text-align:center;font-size:0.78rem;color:var(--gold);margin-bottom:0.4rem;">🔥 {{ _("السعرات") }}</div>
+              <div class="ring-wrap">
+                <canvas id="calRingChart"></canvas>
+                <div class="ring-center">
+                  <div class="ring-pct" style="color:var(--gold)" id="cal-pct-text">0%</div>
+                  <div class="ring-label">{{ today_calories }} {{ _("سعرة") }}</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="text-align:center;font-size:0.78rem;color:var(--cyan);margin-bottom:0.4rem;">💧 {{ _("الماء") }}</div>
+              <div class="ring-wrap">
+                <canvas id="waterRingChart"></canvas>
+                <div class="ring-center">
+                  <div class="ring-pct" style="color:var(--cyan)" id="water-pct-text">0%</div>
+                  <div class="ring-label">{{ today_water_ml }} {{ _("مل") }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card" style="animation-delay:0.3s">
+        <div class="card-header"><div class="card-title">⚡ {{ _("إجراءات سريعة") }}</div></div>
+        <div class="card-body">
+          <div class="actions-grid">
+            <a href="/food-log?new=1" class="action-btn"><span class="action-icon">🍽️</span>{{ _("سجل وجبة") }}</a>
+            <a href="/measurements?new=1" class="action-btn"><span class="action-icon">⚖️</span>{{ _("سجل وزنك") }}</a>
+            <a href="/meal-plan" class="action-btn"><span class="action-icon">📋</span>{{ _("خطة اليوم") }}</a>
+            <a href="/sessions" class="action-btn"><span class="action-icon">📅</span>{{ _("جلساتي") }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Column -->
+    <div class="side-col">
+      <!-- Body Stats -->
+      <div class="card" style="animation-delay:0.2s">
+        <div class="card-header"><div class="card-title">🧬 {{ _("إحصائيات الجسم") }}</div></div>
+        <div class="card-body">
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("الوزن") }}</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <span class="bsr-val">{{ latest_assessment.weight_kg or '—' }}</span>
+              <span style="font-size:0.7rem;color:var(--text-dim)">{{ _("كجم") }}</span>
+            </div>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("BMI") }}</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <span class="bsr-val">{{ latest_assessment.bmi or '—' }}</span>
+              {% if latest_assessment.bmi %}
+                {% if latest_assessment.bmi < 25 %}<span class="bsr-badge badge-normal">{{ _("طبيعي") }}</span>
+                {% elif latest_assessment.bmi < 30 %}<span class="bsr-badge badge-warn">{{ _("زيادة") }}</span>
+                {% else %}<span class="bsr-badge badge-danger">{{ _("سمنة") }}</span>{% endif %}
+              {% endif %}
+            </div>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("نسبة الدهون") }}</span>
+            <span class="bsr-val" style="color:var(--red)">{{ latest_assessment.body_fat_percentage or '—' }}%</span>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("الكتلة العضلية") }}</span>
+            <span class="bsr-val" style="color:var(--green)">{{ latest_assessment.muscle_mass_kg or '—' }} {{ _("كجم") }}</span>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("محيط الخصر") }}</span>
+            <span class="bsr-val">{{ latest_assessment.waist_cm or '—' }} {{ _("سم") }}</span>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("الدهون الحشوية") }}</span>
+            <span class="bsr-val" style="color:var(--gold)">{{ latest_assessment.visceral_fat_level or '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Session -->
+      {% if next_session %}
+      <div class="card" style="animation-delay:0.3s">
+        <div class="card-header"><div class="card-title">📅 {{ _("الجلسة القادمة") }}</div></div>
+        <div class="card-body">
+          <div class="session-box">
+            <div class="session-date-box">
+              <div class="session-day">{{ next_session.session_date.strftime('%d') }}</div>
+              <div class="session-month">{{ next_session.session_date.strftime('%b') }}</div>
+            </div>
+            <div class="session-info">
+              <div class="session-type">{{ _(next_session.session_type or 'متابعة') }}</div>
+              <div class="session-num">{{ _("الجلسة رقم") }} {{ next_session.session_number or '—' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Protocol Info -->
+      {% if protocol %}
+      <div class="card" style="animation-delay:0.35s">
+        <div class="card-header"><div class="card-title">🥗 {{ _("بروتوكولك الغذائي") }}</div></div>
+        <div class="card-body">
+          <div style="font-size:0.9rem;color:var(--text-bright);font-weight:600;margin-bottom:0.8rem;">{{ _(protocol.protocol_name) }}</div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("السعرات المسموحة") }}</span>
+            <span class="bsr-val" style="color:var(--gold)">{{ protocol.daily_calories_target or '—' }}</span>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("الوزن المستهدف") }}</span>
+            <span class="bsr-val">{{ protocol.target_weight_kg }} {{ _("كجم") }}</span>
+          </div>
+          <div class="body-stat-row">
+            <span class="bsr-label">{{ _("الماء اليومي") }}</span>
+            <span class="bsr-val" style="color:var(--cyan)">{{ protocol.water_liters }} {{ _("لتر") }}</span>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
