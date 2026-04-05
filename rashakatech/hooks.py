@@ -148,23 +148,11 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"rashakatech.tasks.all"
-# 	],
-# 	"daily": [
-# 		"rashakatech.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"rashakatech.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"rashakatech.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"rashakatech.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"rashakatech.tasks.daily_assessment_check"
+	],
+}
 
 # Testing
 # -------

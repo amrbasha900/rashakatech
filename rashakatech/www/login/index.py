@@ -27,6 +27,20 @@ def portal_login(usr: str | None = None, pwd: str | None = None):
     login_id = (usr or "").strip()
     resolved_user = _resolve_user_for_login(login_id) or login_id
 
+    # Check for assessment-based disabling
+    if resolved_user and resolved_user != "Guest":
+        user_info = frappe.db.get_value("User", resolved_user, ["name", "enabled", "email"], as_dict=True)
+        if user_info and not user_info.enabled:
+            patient = frappe.db.get_value("Patient", {"email": user_info.email}, ["name"], as_dict=True)
+            if patient:
+                from frappe.utils import date_diff, now_datetime
+                latest_bca = frappe.get_all("Body Composition Assessment", 
+                    filters={"patient": patient.name, "docstatus": ["!=", 2]}, 
+                    order_by="creation desc", limit=1)
+                
+                if not latest_bca or date_diff(now_datetime(), latest_bca[0].creation) > 15:
+                    frappe.throw(_("يجب عليك مراجعة طبيبك") + " | " + _("You should review your doctor"), frappe.AuthenticationError)
+
     login_manager = frappe.local.login_manager
     login_manager.authenticate(user=resolved_user, pwd=pwd)
 
@@ -56,7 +70,7 @@ def _resolve_user_for_login(login_id: str) -> str | None:
 
     user_by_name_or_email = frappe.db.get_value(
         "User",
-        {"enabled": 1, "name": login_id},
+        {"name": login_id},
         "name",
     )
     if user_by_name_or_email:
@@ -64,7 +78,7 @@ def _resolve_user_for_login(login_id: str) -> str | None:
 
     user_by_email = frappe.db.get_value(
         "User",
-        {"enabled": 1, "email": login_id},
+        {"email": login_id},
         "name",
     )
     if user_by_email:
@@ -74,8 +88,7 @@ def _resolve_user_for_login(login_id: str) -> str | None:
         """
         SELECT name
         FROM `tabUser`
-        WHERE enabled = 1
-          AND username = %s
+        WHERE username = %s
         LIMIT 1
         """,
         login_id,
