@@ -96,10 +96,11 @@
   }
  ],
  "links": [],
- "modified": "2026-03-26 02:47:27.655193",
- "modified_by": "Administrator",
+ "modified": "2026-04-03 15:37:50.453662",
+ "modified_by": "amrbasha9000@gmail.com",
  "module": "Rashakatech",
  "name": "Patient Food Log",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -118,6 +119,18 @@
    "create": 1,
    "read": 1,
    "role": "Nutritionist",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patient",
+   "select": 1,
+   "share": 1,
    "write": 1
   }
  ],

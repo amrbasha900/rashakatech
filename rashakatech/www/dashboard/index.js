@@ -3,7 +3,12 @@ frappe.ready(function () {
     document.querySelectorAll('.kpi-value[data-val]').forEach(el => {
         const target = parseFloat(el.dataset.val);
         const isFloat = el.dataset.val.includes('.');
-        animateCounter(el, target, isFloat);
+        const explicitPrecision = parseInt(el.dataset.precision, 10);
+        const inferredPrecision = (el.dataset.val.split('.')[1] || '').length;
+        const precision = Number.isNaN(explicitPrecision)
+            ? Math.min(Math.max(inferredPrecision, 0), 2)
+            : Math.max(explicitPrecision, 0);
+        animateCounter(el, target, isFloat, precision);
     });
 
     // Weight & Fat Chart
@@ -47,14 +52,14 @@ frappe.ready(function () {
     }, 4000);
 });
 
-function animateCounter(el, target, isFloat) {
+function animateCounter(el, target, isFloat, precision = 1) {
     const duration = 1200;
     const start = performance.now();
     function step(now) {
         const progress = Math.min((now - start) / duration, 1);
         const ease = 1 - Math.pow(1 - progress, 3);
         const current = target * ease;
-        el.textContent = isFloat ? current.toFixed(1) : Math.round(current);
+        el.textContent = isFloat ? current.toFixed(precision) : Math.round(current);
         if (progress < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -201,3 +206,24 @@ function initWaterRing(ml, target) {
     });
     document.getElementById('water-pct-text').textContent = Math.round((ml / target) * 100) + '%';
 }
+
+function handlePortalLogout(event) {
+    if (event) {
+        event.preventDefault();
+    }
+
+    frappe.call({
+        method: "rashakatech.www.dashboard.index.portal_logout",
+        callback: function (response) {
+            const redirectTo = response?.message?.redirect_to || "/login";
+            window.location.href = redirectTo;
+        },
+        error: function () {
+            window.location.href = "/login";
+        }
+    });
+
+    return false;
+}
+
+window.handlePortalLogout = handlePortalLogout;

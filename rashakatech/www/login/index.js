@@ -14,16 +14,18 @@ frappe.ready(function () {
 
         try {
             const res = await frappe.call({
-                method: 'login',
+                method: 'rashakatech.www.login.index.portal_login',
                 args: { usr: email, pwd: password }
             });
 
-            if (res.message === 'Logged In') {
+            if (res.message && res.message.status === 'ok') {
                 btn.innerHTML = '<span class="btn-icon">✓</span> تم الدخول';
                 btn.style.background = 'linear-gradient(135deg, #00ff88, #00cc66)';
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
+                    window.location.href = res.message.redirect_to || '/dashboard';
                 }, 800);
+            } else {
+                throw new Error('Login failed');
             }
         } catch (err) {
             msg.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';

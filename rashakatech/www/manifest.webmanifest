@@ -1,0 +1,22 @@
+{
+  "name": {{ ((company_name or "Rashakatech") ~ " Portal") | tojson }},
+  "short_name": {{ (company_name or "Rashakatech") | tojson }},
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050f18",
+  "theme_color": "#050f18",
+  "description": "Nutrition and patient tracking portal.",
+  "icons": [
+    {
+      "src": {{ (icon_192 or "/assets/rashakatech/icons/pwa-192.svg") | tojson }},
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": {{ (icon_512 or "/assets/rashakatech/icons/pwa-512.svg") | tojson }},
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

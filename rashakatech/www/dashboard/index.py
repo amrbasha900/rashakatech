@@ -137,3 +137,11 @@ def get_patient():
         as_dict=True
     )
     return patient
+
+
+@frappe.whitelist()
+def portal_logout():
+    """Logout portal user and provide safe redirect target."""
+    if frappe.session.user != "Guest":
+        frappe.local.login_manager.logout()
+    return {"redirect_to": "/login"}

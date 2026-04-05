@@ -38,20 +38,36 @@ def get_context(context):
     today_calories = 0
     today_water = sum(float(l.water_intake_ml or 0) for l in today_logs_docs)
 
+    has_item_qty = frappe.db.has_column("Patient Food Log Items", "qty")
+    has_item_calories = frappe.db.has_column("Patient Food Log Items", "calories")
+    has_item_food = frappe.db.has_column("Patient Food Log Items", "food_item")
+
+    if has_item_calories:
+        item_cal_expr = "COALESCE(i.calories, 0)"
+    elif has_item_qty and has_item_food:
+        item_cal_expr = "(COALESCE(i.qty, 0) * COALESCE(f.calories_per_100g, 0) / 100)"
+    else:
+        item_cal_expr = "0"
+
     for l in today_logs_docs:
-        items = frappe.get_all(
-            "Patient Food Log Items",
-            filters={"parent": l["name"]},
-            fields=[
-                "food_item", 
-                "food_item.food_name_ar as food_name",
-                "food_description", 
-                "qty", 
-                "unit", 
-                "calories"
-            ],
-            order_by="`tabPatient Food Log Items`.idx asc"
+        items = frappe.db.sql(
+            f"""
+            SELECT
+                i.food_item,
+                COALESCE(f.food_name_ar, f.food_name_en) AS food_name,
+                i.food_description,
+                {"i.qty" if has_item_qty else "0 AS qty"},
+                i.unit,
+                {item_cal_expr} AS calories
+            FROM `tabPatient Food Log Items` i
+            LEFT JOIN `tabFood Item` f ON f.name = i.food_item
+            WHERE i.parent = %s
+            ORDER BY i.idx ASC
+            """,
+            l["name"],
+            as_dict=True,
         )
+
         l_cals = sum(float(i.calories or 0) for i in items)
         today_calories += l_cals
         l["food_items"] = items
@@ -72,18 +88,27 @@ def get_context(context):
     context.protocol = protocol or {"daily_calories_target": 2000, "water_liters": 2.5}
 
     # Last 14 days calorie trend
-    trend = frappe.db.sql("""
+    trend = frappe.db.sql(
+        f"""
         SELECT log_date, SUM(total_cal) as total_cal, SUM(water_intake_ml) as total_water
         FROM (
-            SELECT p.log_date, p.name, MAX(p.water_intake_ml) as water_intake_ml, SUM(IFNULL(c.calories, 0)) as total_cal
+            SELECT
+                p.log_date,
+                p.name,
+                MAX(p.water_intake_ml) as water_intake_ml,
+                SUM({item_cal_expr.replace('i.', 'c.')}) as total_cal
             FROM `tabPatient Food Log` p
             LEFT JOIN `tabPatient Food Log Items` c ON c.parent = p.name
+            LEFT JOIN `tabFood Item` f ON f.name = c.food_item
             WHERE p.patient = %s AND p.log_date >= DATE_SUB(%s, INTERVAL 14 DAY)
             GROUP BY p.name
         ) as daily_logs
         GROUP BY log_date
         ORDER BY log_date ASC
-    """, (patient.name, today), as_dict=True)
+        """,
+        (patient.name, today),
+        as_dict=True,
+    )
     context.trend_data = json.dumps({
         "dates": [str(t.log_date) for t in trend],
         "calories": [float(t.total_cal or 0) for t in trend],

@@ -68,6 +68,8 @@
    "fetch_from": "patient.patient_name",
    "fieldname": "patient_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Patient Name",
    "read_only": 1
   },
@@ -278,8 +280,8 @@
   }
  ],
  "links": [],
- "modified": "2026-03-24 02:56:33.472612",
- "modified_by": "Administrator",
+ "modified": "2026-04-03 15:52:40.551183",
+ "modified_by": "amrbasha9000@gmail.com",
  "module": "Rashakatech",
  "name": "Body Composition Assessment",
  "naming_rule": "Expression (old style)",
@@ -299,8 +301,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
+ "title_field": "patient_name",
  "track_changes": 1
 }
